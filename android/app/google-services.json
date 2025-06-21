@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "609664181004",
+    "project_id": "slushies-7eaf7",
+    "storage_bucket": "slushies-7eaf7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:609664181004:android:afe274edeeea91925edf29",
+        "android_client_info": {
+          "package_name": "com.example.slushies"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjWiZiBcyUiE799UH9eTEOKdxzZAhIMrc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
