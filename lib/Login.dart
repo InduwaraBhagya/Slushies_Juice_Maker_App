@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'sihnup.dart'; // Your signup screen
+import 'signup.dart'; // Your signup screen
 import 'Home.dart';  // Your home screen after login
 
 class LoginScreen extends StatefulWidget {
@@ -143,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen>
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.local_cafe, size: 100, color: Colors.white),
+                      const Icon(Icons.wine_bar, size: 100, color: Colors.white),
                       const SizedBox(height: 42),
                       const Text(
                         'Slushies Login',

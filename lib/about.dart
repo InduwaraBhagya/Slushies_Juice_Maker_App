@@ -74,7 +74,7 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('About Slushies'),
+        title: const Text('About Slushies',style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.deepOrange,
         centerTitle: true,
       ),

@@ -6,8 +6,7 @@ import 'firebase_options.dart';
 import 'login.dart';
 import 'Home.dart';
 import 'juice_customization.dart';
-import 'order_history.dart';
-import 'setting.dart';
+import 'package:slushies/order_history.dart';
 import 'about.dart';
 import 'customer_profile.dart';
 
@@ -33,7 +32,6 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/customize': (context) => const JuiceCustomizationPage(),
         '/history': (context) => const OrderHistoryPage(),
-        '/settings': (context) => const SettingsPage(),
         '/about': (context) => const AboutPage(),
         '/profile': (context) => const CustomerProfilePage(),
       },
