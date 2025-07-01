@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
+
 class JuiceCustomizationPage extends StatefulWidget {
   const JuiceCustomizationPage({super.key});
 
@@ -392,39 +393,46 @@ class _PaymentPageState extends State<PaymentPage> {
         ? cardNumber.substring(cardNumber.length - 4)
         : cardNumber;
 
-    await FirebaseFirestore.instance
-        .collection('orders')
-        .doc(widget.orderId)
-        .update({
-      'status': 'paid',
-      'payment': {
-        'type': selectedCardType,
-        'last4': last4,
-        'name': _nameController.text.trim(),
-        'paidAt': DateTime.now().toIso8601String(),
-      },
-    });
-    // Update Realtime Database as well
-    final dbRef = FirebaseDatabase.instance.ref('orders/${widget.orderId}');
-    await dbRef.update({
-      'status': 'paid',
-      'payment': {
-        'type': selectedCardType,
-        'last4': last4,
-        'name': _nameController.text.trim(),
-        'paidAt': DateTime.now().toIso8601String(),
-      },
-    });
+    try {
+      await FirebaseFirestore.instance
+          .collection('orders')
+          .doc(widget.orderId)
+          .update({
+        'status': 'paid',
+        'payment': {
+          'type': selectedCardType,
+          'last4': last4,
+          'name': _nameController.text.trim(),
+          'paidAt': DateTime.now().toIso8601String(),
+        },
+      });
+      // Update Realtime Database as well
+      final dbRef = FirebaseDatabase.instance.ref('orders/${widget.orderId}');
+      await dbRef.update({
+        'status': 'paid',
+        'payment': {
+          'type': selectedCardType,
+          'last4': last4,
+          'name': _nameController.text.trim(),
+          'paidAt': DateTime.now().toIso8601String(),
+        },
+      });
 
-    setState(() => isPaying = false);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Payment successful!')),
-    );
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => const JuiceCustomizationPage()),
-      (route) => false,
-    );
+      setState(() => isPaying = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Payment successful!')),
+      );
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const JuiceCustomizationPage()),
+        (route) => false,
+      );
+    } catch (e) {
+      setState(() => isPaying = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Payment failed: $e')),
+      );
+    }
   }
 
   Widget _buildCardTypeSelector() {
