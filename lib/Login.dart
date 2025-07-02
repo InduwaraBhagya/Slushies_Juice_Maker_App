@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'signup.dart'; // Your signup screen
-import 'Home.dart';  // Your home screen after login
+import 'signup.dart'; 
+import 'Home.dart';  
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -121,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen>
       backgroundColor: const Color(0xFFFDEBD0),
       body: Stack(
         children: [
-          // Top wave shape
+          
           Positioned(
             top: 0,
             left: 0,

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -17,18 +18,18 @@ class _JuiceCustomizationPageState extends State<JuiceCustomizationPage>
 
   final Map<String, List<Map<String, String>>> cityJuices = {
     'Colombo': [
-      {'name': 'Orange', 'image': 'assets/Orange.jpeg'},
-      {'name': 'Strawberry', 'image': 'assets/Strawberry.jpeg'},
-      {'name': 'Mango', 'image': 'assets/Mango.jpeg'},
-      {'name': 'Papaya', 'image': 'assets/Papaya.jpeg'},
-      {'name': 'Avocado', 'image': 'assets/Avocado.jpeg'},
+      {'name': 'Orange', "price": "Rs. 250", 'image': 'assets/Orange.jpeg'},
+      {'name': 'Strawberry', "price": "Rs. 150", 'image': 'assets/Strawberry.jpeg'},
+      {'name': 'Mango',"price": "Rs. 100", 'image': 'assets/Mango.jpeg'},
+      {'name': 'Papaya',"price": "Rs. 150", 'image': 'assets/Papaya.jpeg'},
+      {'name': 'Avocado', "price": "Rs. 250",'image': 'assets/Avocado.jpeg'},
     ],
     'Kandy': [
-      {'name': 'Papaya', 'image': 'assets/Papaya.jpeg'},
-      {'name': 'Orange', 'image': 'assets/Orange.jpeg'},
-      {'name': 'Avocado', 'image': 'assets/Avocado.jpeg'},
-      {'name': 'Mango', 'image': 'assets/Mango.jpeg'},
-      {'name': 'Strawberry', 'image': 'assets/Strawberry.jpeg'},
+      {'name': 'Papaya', "price": "Rs. 1000",'image': 'assets/Papaya.jpeg'},
+      {'name': 'Orange', "price": "Rs. 1000",'image': 'assets/Orange.jpeg'},
+      {'name': 'Avocado', "price": "Rs. 1000",'image': 'assets/Avocado.jpeg'},
+      {'name': 'Mango', "price": "Rs. 1000",'image': 'assets/Mango.jpeg'},
+      {'name': 'Strawberry',"price": "Rs. 1000", 'image': 'assets/Strawberry.jpeg'},
     ],
     'Galle': [
       {'name': 'Strawberry', 'image': 'assets/Strawberry.jpeg'},
@@ -39,7 +40,7 @@ class _JuiceCustomizationPageState extends State<JuiceCustomizationPage>
     ],
   };
 
-  final List<String> addons = ['Sugar',  'Water'];
+  final List<String> addons = ['Sugar', 'Water'];
 
   String selectedCity = 'Colombo';
   String? selectedJuice;
@@ -69,29 +70,31 @@ class _JuiceCustomizationPageState extends State<JuiceCustomizationPage>
 
   Future<void> placeOrder() async {
     if (selectedJuice == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a juice!')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please select a juice!')));
       return;
     }
 
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('User not logged in!')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('User not logged in!')));
       return;
     }
 
     try {
-      final orderRef = await FirebaseFirestore.instance.collection('orders').add({
-        'user_id': user.uid,
-        'juice_type': selectedJuice,
-        'ingredient_list': selectedAddons.toList(),
-        'location': selectedCity,
-        'timestamp': FieldValue.serverTimestamp(),
-        'status': 'pending_payment',
-      });
+      final orderRef = await FirebaseFirestore.instance
+          .collection('orders')
+          .add({
+            'user_id': user.uid,
+            'juice_type': selectedJuice,
+            'ingredient_list': selectedAddons.toList(),
+            'location': selectedCity,
+            'timestamp': FieldValue.serverTimestamp(),
+            'status': 'pending_payment',
+          });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Order placed! Please complete payment.')),
       );
@@ -102,9 +105,9 @@ class _JuiceCustomizationPageState extends State<JuiceCustomizationPage>
         ),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to place order: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to place order: $e')));
     }
   }
 
@@ -135,17 +138,19 @@ class _JuiceCustomizationPageState extends State<JuiceCustomizationPage>
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           gradient: LinearGradient(
-            colors: isSelected
-                ? [Colors.orange.shade200, Colors.deepOrange.shade200]
-                : [Colors.white, Colors.grey.shade200],
+            colors:
+                isSelected
+                    ? [Colors.orange.shade200, Colors.deepOrange.shade200]
+                    : [Colors.white, Colors.grey.shade200],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           boxShadow: [
             BoxShadow(
-              color: isSelected
-                  ? Colors.deepOrange.withOpacity(0.3)
-                  : Colors.grey.withOpacity(0.2),
+              color:
+                  isSelected
+                      ? Colors.deepOrange.withOpacity(0.3)
+                      : Colors.grey.withOpacity(0.2),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -168,7 +173,7 @@ class _JuiceCustomizationPageState extends State<JuiceCustomizationPage>
                     color: Colors.black26,
                     blurRadius: 6,
                     offset: const Offset(0, 3),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -179,15 +184,16 @@ class _JuiceCustomizationPageState extends State<JuiceCustomizationPage>
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
                 color: isSelected ? Colors.white : Colors.deepOrange,
-                shadows: isSelected
-                    ? [
-                        const Shadow(
-                          color: Colors.black26,
-                          offset: Offset(1, 1),
-                          blurRadius: 2,
-                        )
-                      ]
-                    : [],
+                shadows:
+                    isSelected
+                        ? [
+                          const Shadow(
+                            color: Colors.black26,
+                            offset: Offset(1, 1),
+                            blurRadius: 2,
+                          ),
+                        ]
+                        : [],
               ),
             ),
           ],
@@ -207,12 +213,10 @@ class _JuiceCustomizationPageState extends State<JuiceCustomizationPage>
       ),
       icon: const Icon(Icons.location_city, color: Colors.deepOrange),
       dropdownColor: Colors.white,
-      items: cities
-          .map((city) => DropdownMenuItem(
-                value: city,
-                child: Text(city),
-              ))
-          .toList(),
+      items:
+          cities
+              .map((city) => DropdownMenuItem(value: city, child: Text(city)))
+              .toList(),
       onChanged: (value) {
         if (value != null) _updateJuicesForCity(value);
       },
@@ -222,21 +226,22 @@ class _JuiceCustomizationPageState extends State<JuiceCustomizationPage>
   Widget buildAddonsChips() {
     return Wrap(
       spacing: 10,
-      children: addons.map((addon) {
-        final isSelected = selectedAddons.contains(addon);
-        return FilterChip(
-          label: Text(addon),
-          selected: isSelected,
-          selectedColor: Colors.deepOrange,
-          backgroundColor: Colors.grey.shade200,
-          checkmarkColor: Colors.white,
-          onSelected: (_) => toggleAddOn(addon),
-          labelStyle: TextStyle(
-            color: isSelected ? Colors.white : Colors.black87,
-            fontWeight: FontWeight.w500,
-          ),
-        );
-      }).toList(),
+      children:
+          addons.map((addon) {
+            final isSelected = selectedAddons.contains(addon);
+            return FilterChip(
+              label: Text(addon),
+              selected: isSelected,
+              selectedColor: Colors.deepOrange,
+              backgroundColor: Colors.grey.shade200,
+              checkmarkColor: Colors.white,
+              onSelected: (_) => toggleAddOn(addon),
+              labelStyle: TextStyle(
+                color: isSelected ? Colors.white : Colors.black87,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }).toList(),
     );
   }
 
@@ -290,7 +295,10 @@ class _JuiceCustomizationPageState extends State<JuiceCustomizationPage>
       appBar: AppBar(
         backgroundColor: Colors.deepOrange,
         centerTitle: true,
-        title: const Text('Juice Customizer', style: TextStyle(color: Colors.white)),
+        title: const Text(
+          'Juice Customizer',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
@@ -339,8 +347,10 @@ class _JuiceCustomizationPageState extends State<JuiceCustomizationPage>
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepOrange,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 14,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -389,25 +399,29 @@ class _PaymentPageState extends State<PaymentPage> {
     await Future.delayed(const Duration(seconds: 2));
 
     final cardNumber = _cardNumberController.text.trim();
-    final last4 = cardNumber.length >= 4
-        ? cardNumber.substring(cardNumber.length - 4)
-        : cardNumber;
+    final last4 =
+        cardNumber.length >= 4
+            ? cardNumber.substring(cardNumber.length - 4)
+            : cardNumber;
 
     try {
       await FirebaseFirestore.instance
           .collection('orders')
           .doc(widget.orderId)
           .update({
-        'status': 'paid',
-        'payment': {
-          'type': selectedCardType,
-          'last4': last4,
-          'name': _nameController.text.trim(),
-          'paidAt': DateTime.now().toIso8601String(),
-        },
-      });
+            'status': 'paid',
+            'payment': {
+              'type': selectedCardType,
+              'last4': last4,
+              'name': _nameController.text.trim(),
+              'paidAt': DateTime.now().toIso8601String(),
+            },
+          });
       // Update Realtime Database as well
-      final dbRef = FirebaseDatabase.instance.ref('orders/${widget.orderId}');
+      final dbRef = FirebaseDatabase.instanceFor(
+        app: Firebase.app(),
+        databaseURL: 'https://slushies-7eaf7-default-rtdb.firebaseio.com/',
+      ).ref('orders/${widget.orderId}');
       await dbRef.update({
         'status': 'paid',
         'payment': {
@@ -419,19 +433,19 @@ class _PaymentPageState extends State<PaymentPage> {
       });
 
       setState(() => isPaying = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Payment successful!')),
-      );
-      Navigator.pushAndRemoveUntil(
+      ScaffoldMessenger.of(
         context,
-        MaterialPageRoute(builder: (context) => const JuiceCustomizationPage()),
-        (route) => false,
-      );
+      ).showSnackBar(const SnackBar(content: Text('Payment successful!')));
+     Navigator.pushReplacement(
+  context,
+  MaterialPageRoute(builder: (context) => const JuicePreparingPage()),
+);
+
     } catch (e) {
       setState(() => isPaying = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Payment failed: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Payment failed: $e')));
     }
   }
 
@@ -439,29 +453,37 @@ class _PaymentPageState extends State<PaymentPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Select Card Type',
-            style: TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.deepOrange)),
+        const Text(
+          'Select Card Type',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.deepOrange,
+          ),
+        ),
         const SizedBox(height: 8),
         Wrap(
           spacing: 10,
-          children: cardTypes.map((type) {
-            return ChoiceChip(
-              label: Text(type),
-              selected: selectedCardType == type,
-              onSelected: (_) => setState(() => selectedCardType = type),
-              selectedColor: Colors.deepOrange,
-              backgroundColor: Colors.grey.shade200,
-              labelStyle: TextStyle(
-                color:
-                    selectedCardType == type ? Colors.white : Colors.black,
-              ),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-            );
-          }).toList(),
+          children:
+              cardTypes.map((type) {
+                return ChoiceChip(
+                  label: Text(type),
+                  selected: selectedCardType == type,
+                  onSelected: (_) => setState(() => selectedCardType = type),
+                  selectedColor: Colors.deepOrange,
+                  backgroundColor: Colors.grey.shade200,
+                  labelStyle: TextStyle(
+                    color:
+                        selectedCardType == type ? Colors.white : Colors.black,
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                );
+              }).toList(),
         ),
       ],
     );
@@ -471,8 +493,10 @@ class _PaymentPageState extends State<PaymentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            const Text('Card Payment', style: TextStyle(color: Colors.white)),
+        title: const Text(
+          'Card Payment',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.deepOrange,
         centerTitle: true,
       ),
@@ -490,7 +514,8 @@ class _PaymentPageState extends State<PaymentPage> {
             child: Card(
               elevation: 8,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
+                borderRadius: BorderRadius.circular(16),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(24),
                 child: Form(
@@ -502,21 +527,25 @@ class _PaymentPageState extends State<PaymentPage> {
                       const SizedBox(height: 20),
                       TextFormField(
                         controller: _nameController,
-                        decoration:
-                            const InputDecoration(labelText: 'Name on Card'),
-                        validator: (v) =>
-                            v == null || v.isEmpty ? 'Enter name' : null,
+                        decoration: const InputDecoration(
+                          labelText: 'Name on Card',
+                        ),
+                        validator:
+                            (v) => v == null || v.isEmpty ? 'Enter name' : null,
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _cardNumberController,
-                        decoration:
-                            const InputDecoration(labelText: 'Card Number'),
+                        decoration: const InputDecoration(
+                          labelText: 'Card Number',
+                        ),
                         keyboardType: TextInputType.number,
                         maxLength: 16,
-                        validator: (v) => v == null || v.length < 12
-                            ? 'Enter valid card number'
-                            : null,
+                        validator:
+                            (v) =>
+                                v == null || v.length < 12
+                                    ? 'Enter valid card number'
+                                    : null,
                       ),
                       const SizedBox(height: 16),
                       Row(
@@ -525,27 +554,33 @@ class _PaymentPageState extends State<PaymentPage> {
                             child: TextFormField(
                               controller: _expiryController,
                               decoration: const InputDecoration(
-                                  labelText: 'MM/YY'),
+                                labelText: 'MM/YY',
+                              ),
                               maxLength: 5,
-                              validator: (v) =>
-                                  v == null ||
-                                          !RegExp(r'^(0[1-9]|1[0-2])/\d{2}$')
-                                              .hasMatch(v)
-                                      ? 'Enter valid MM/YY'
-                                      : null,
+                              validator:
+                                  (v) =>
+                                      v == null ||
+                                              !RegExp(
+                                                r'^(0[1-9]|1[0-2])/\d{2}$',
+                                              ).hasMatch(v)
+                                          ? 'Enter valid MM/YY'
+                                          : null,
                             ),
                           ),
                           const SizedBox(width: 16),
                           Expanded(
                             child: TextFormField(
                               controller: _cvvController,
-                              decoration:
-                                  const InputDecoration(labelText: 'CVV'),
+                              decoration: const InputDecoration(
+                                labelText: 'CVV',
+                              ),
                               keyboardType: TextInputType.number,
                               maxLength: 4,
-                              validator: (v) => v == null || v.length < 3
-                                  ? 'Enter valid CVV'
-                                  : null,
+                              validator:
+                                  (v) =>
+                                      v == null || v.length < 3
+                                          ? 'Enter valid CVV'
+                                          : null,
                             ),
                           ),
                         ],
@@ -554,19 +589,26 @@ class _PaymentPageState extends State<PaymentPage> {
                       ElevatedButton.icon(
                         onPressed: isPaying ? null : _pay,
                         icon: const Icon(Icons.lock, color: Colors.white),
-                        label: isPaying
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                    strokeWidth: 2, color: Colors.white),
-                              )
-                            : const Text('Pay Now',
-                                style: TextStyle(color: Colors.white)),
+                        label:
+                            isPaying
+                                ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                                : const Text(
+                                  'Pay Now',
+                                  style: TextStyle(color: Colors.white),
+                                ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.deepOrange,
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 40, vertical: 16),
+                            horizontal: 40,
+                            vertical: 16,
+                          ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -577,6 +619,97 @@ class _PaymentPageState extends State<PaymentPage> {
                 ),
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+class JuicePreparingPage extends StatefulWidget {
+  const JuicePreparingPage({super.key});
+
+  @override
+  State<JuicePreparingPage> createState() => _JuicePreparingPageState();
+}
+
+class _JuicePreparingPageState extends State<JuicePreparingPage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  bool isDone = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      duration: const Duration(seconds: 4),
+      vsync: this,
+    );
+
+    _animation = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ))
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          setState(() => isDone = true);
+          Future.delayed(const Duration(seconds: 2), () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const JuiceCustomizationPage()),
+              (route) => false,
+            );
+          });
+        }
+      });
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Widget _buildProgress() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(Icons.local_drink,
+            size: 80, color: Colors.deepOrangeAccent),
+        const SizedBox(height: 20),
+        Text(
+          isDone ? 'Juice Ready!' : 'Preparing Your Juice...',
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.deepOrange,
+          ),
+        ),
+        const SizedBox(height: 30),
+        LinearProgressIndicator(
+          value: _animation.value,
+          color: Colors.deepOrange,
+          backgroundColor: Colors.orange.shade100,
+          minHeight: 12,
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.orange.shade50,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: AnimatedBuilder(
+            animation: _animation,
+            builder: (context, _) => _buildProgress(),
           ),
         ),
       ),

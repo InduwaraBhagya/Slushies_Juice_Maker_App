@@ -37,8 +37,6 @@ class DefaultFirebaseOptions {
         throw UnsupportedError(
           'DefaultFirebaseOptions are not supported for this platform.',
         );
-
-        
     }
   }
 
@@ -48,7 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '609664181004',
     projectId: 'slushies-7eaf7',
     authDomain: 'slushies-7eaf7.firebaseapp.com',
-    storageBucket: 'slushies-7eaf7.firebasestorage.app',
+    storageBucket: 'slushies-7eaf7.appspot.com',
     measurementId: 'G-KJF4J0BM0N',
   );
 
@@ -58,7 +56,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '609664181004',
     projectId: 'slushies-7eaf7',
     authDomain: 'slushies-7eaf7.firebaseapp.com',
-    storageBucket: 'slushies-7eaf7.firebasestorage.app',
+    storageBucket: 'slushies-7eaf7.appspot.com',
     measurementId: 'G-KJF4J0BM0N',
   );
 
@@ -67,7 +65,7 @@ class DefaultFirebaseOptions {
     appId: '1:609664181004:ios:a1d9e36bb3e0e89c5edf29',
     messagingSenderId: '609664181004',
     projectId: 'slushies-7eaf7',
-    storageBucket: 'slushies-7eaf7.firebasestorage.app',
+    storageBucket: 'slushies-7eaf7.appspot.com',
     iosBundleId: 'com.example.slushies',
   );
 
@@ -76,7 +74,7 @@ class DefaultFirebaseOptions {
     appId: '1:609664181004:ios:a1d9e36bb3e0e89c5edf29',
     messagingSenderId: '609664181004',
     projectId: 'slushies-7eaf7',
-    storageBucket: 'slushies-7eaf7.firebasestorage.app',
+    storageBucket: 'slushies-7eaf7.appspot.com',
     iosBundleId: 'com.example.slushies',
   );
 
@@ -85,7 +83,6 @@ class DefaultFirebaseOptions {
     appId: '1:609664181004:android:afe274edeeea91925edf29',
     messagingSenderId: '609664181004',
     projectId: 'slushies-7eaf7',
-    storageBucket: 'slushies-7eaf7.firebasestorage.app',
+    storageBucket: 'slushies-7eaf7.appspot.com',
   );
-
 }

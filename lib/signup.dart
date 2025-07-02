@@ -74,8 +74,8 @@ class _SignUpScreenState extends State<SignUpScreen>
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context); // Close dialog
-                Navigator.pop(context); // Back to login
+                Navigator.pop(context); 
+                Navigator.pop(context); 
               },
               child: const Text('OK'),
             ),

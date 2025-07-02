@@ -33,7 +33,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> with SingleTickerPr
       debugPrint('No user logged in.');
       return;
     }
-    // Try both userId and user_id for compatibility
+ 
     final snapshot = await FirebaseFirestore.instance
         .collection('orders')
         .where('userId', isEqualTo: user.uid)
@@ -59,7 +59,6 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> with SingleTickerPr
     super.dispose();
   }
 
-  // Build each animated item with stagger
   Widget _buildAnimatedItem(BuildContext context, int index) {
     final Animation<double> animation = CurvedAnimation(
       parent: _controller,
@@ -72,7 +71,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> with SingleTickerPr
 
     final order = userOrders[index];
 
-    // Use Firestore field names as in your example
+   
     final flavor = order['flavor'] ?? order['juice_type'] ?? '';
     final addons = (order['addons'] is List)
         ? (order['addons'] as List).join(', ')

@@ -267,7 +267,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Playful avatar and header
+                
                   Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -297,7 +297,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 24),
-                  // Glassmorphism card for the form
+                  
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: BackdropFilter(
