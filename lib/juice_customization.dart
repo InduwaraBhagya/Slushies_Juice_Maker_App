@@ -25,18 +25,18 @@ class _JuiceCustomizationPageState extends State<JuiceCustomizationPage>
       {'name': 'Avocado', "price": "Rs. 250",'image': 'assets/Avocado.jpeg'},
     ],
     'Kandy': [
-      {'name': 'Papaya', "price": "Rs. 1000",'image': 'assets/Papaya.jpeg'},
-      {'name': 'Orange', "price": "Rs. 1000",'image': 'assets/Orange.jpeg'},
-      {'name': 'Avocado', "price": "Rs. 1000",'image': 'assets/Avocado.jpeg'},
-      {'name': 'Mango', "price": "Rs. 1000",'image': 'assets/Mango.jpeg'},
-      {'name': 'Strawberry',"price": "Rs. 1000", 'image': 'assets/Strawberry.jpeg'},
+      {'name': 'Papaya', "price": "Rs. 150",'image': 'assets/Papaya.jpeg'},
+      {'name': 'Orange', "price": "Rs. 250",'image': 'assets/Orange.jpeg'},
+      {'name': 'Avocado', "price": "Rs. 250",'image': 'assets/Avocado.jpeg'},
+      {'name': 'Mango', "price": "Rs. 100",'image': 'assets/Mango.jpeg'},
+      {'name': 'Strawberry',"price": "Rs. 150", 'image': 'assets/Strawberry.jpeg'},
     ],
     'Galle': [
-      {'name': 'Strawberry', 'image': 'assets/Strawberry.jpeg'},
-      {'name': 'Papaya', 'image': 'assets/Papaya.jpeg'},
-      {'name': 'Mango', 'image': 'assets/Mango.jpeg'},
-      {'name': 'Avocado', 'image': 'assets/Avocado.jpeg'},
-      {'name': 'Orange', 'image': 'assets/Orange.jpeg'},
+      {'name': 'Strawberry',"price": "Rs. 150", 'image': 'assets/Strawberry.jpeg'},
+      {'name': 'Papaya',"price": "Rs. 150", 'image': 'assets/Papaya.jpeg'},
+      {'name': 'Mango',  "price": "Rs. 100",'image': 'assets/Mango.jpeg'},
+      {'name': 'Avocado', "price": "Rs. 250",'image': 'assets/Avocado.jpeg'},
+      {'name': 'Orange', "price": "Rs. 250",'image': 'assets/Orange.jpeg'},
     ],
   };
 
@@ -128,80 +128,88 @@ class _JuiceCustomizationPageState extends State<JuiceCustomizationPage>
     super.dispose();
   }
 
-  Widget buildJuiceCard(Map<String, String> juice) {
-    final isSelected = selectedJuice == juice['name'];
-    return GestureDetector(
-      onTap: () => setState(() => selectedJuice = juice['name']),
-      child: Container(
-        width: 140,
-        margin: const EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: LinearGradient(
-            colors:
-                isSelected
-                    ? [Colors.orange.shade200, Colors.deepOrange.shade200]
-                    : [Colors.white, Colors.grey.shade200],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+  // ONLY buildJuiceCard() method is updated
+
+Widget buildJuiceCard(Map<String, String> juice) {
+  final isSelected = selectedJuice == juice['name'];
+  return GestureDetector(
+    onTap: () => setState(() => selectedJuice = juice['name']),
+    child: Container(
+      width: 140,
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        gradient: LinearGradient(
+          colors: isSelected
+              ? [Colors.orange.shade200, Colors.deepOrange.shade200]
+              : [Colors.white, Colors.grey.shade200],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: isSelected
+                ? Colors.deepOrange.withOpacity(0.3)
+                : Colors.grey.withOpacity(0.2),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
-          boxShadow: [
-            BoxShadow(
-              color:
-                  isSelected
-                      ? Colors.deepOrange.withOpacity(0.3)
-                      : Colors.grey.withOpacity(0.2),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              height: 90,
-              width: 90,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18),
-                image: DecorationImage(
-                  image: AssetImage(juice['image']!),
-                  fit: BoxFit.cover,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 6,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              juice['name']!,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: isSelected ? Colors.white : Colors.deepOrange,
-                shadows:
-                    isSelected
-                        ? [
-                          const Shadow(
-                            color: Colors.black26,
-                            offset: Offset(1, 1),
-                            blurRadius: 2,
-                          ),
-                        ]
-                        : [],
-              ),
-            ),
-            
-          ],
-        ),
+        ],
       ),
-    );
-  }
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            height: 90,
+            width: 90,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+              image: DecorationImage(
+                image: AssetImage(juice['image']!),
+                fit: BoxFit.cover,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 6,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            juice['name']!,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: isSelected ? Colors.white : Colors.deepOrange,
+              shadows: isSelected
+                  ? [
+                      const Shadow(
+                        color: Colors.black26,
+                        offset: Offset(1, 1),
+                        blurRadius: 2,
+                      ),
+                    ]
+                  : [],
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            juice['price'] ?? '',
+            style: TextStyle(
+              fontSize: 14,
+              color: isSelected ? Colors.white70 : Colors.black87,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 
   Widget buildCitySelector() {
     return DropdownButtonFormField<String>(
