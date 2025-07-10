@@ -17,7 +17,6 @@ class _CustomerProfilePageState extends State<CustomerProfilePage>
 
   String name = '';
   String email = '';
-  String location = 'Not specified';
 
   @override
   void initState() {
@@ -78,7 +77,6 @@ class _CustomerProfilePageState extends State<CustomerProfilePage>
         builder: (context) => EditProfilePage(
           currentName: name,
           currentEmail: email,
-          currentLocation: location,
         ),
       ),
     );
@@ -87,7 +85,6 @@ class _CustomerProfilePageState extends State<CustomerProfilePage>
       setState(() {
         name = result['name'] ?? name;
         email = result['email'] ?? email;
-        location = result['location'] ?? location;
       });
     }
   }
@@ -140,7 +137,6 @@ class _CustomerProfilePageState extends State<CustomerProfilePage>
                                 fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black)),
                         const SizedBox(height: 8),
                         _buildInfoRow(Icons.email, email),
-                        _buildInfoRow(Icons.location_on, location),
                       ],
                     ),
                   ),
@@ -186,13 +182,11 @@ class _CustomerProfilePageState extends State<CustomerProfilePage>
 class EditProfilePage extends StatefulWidget {
   final String currentName;
   final String currentEmail;
-  final String currentLocation;
 
   const EditProfilePage({
     super.key,
     required this.currentName,
     required this.currentEmail,
-    required this.currentLocation,
   });
 
   @override
@@ -202,28 +196,24 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   late TextEditingController nameController;
   late TextEditingController emailController;
-  late TextEditingController locationController;
 
   @override
   void initState() {
     super.initState();
     nameController = TextEditingController(text: widget.currentName);
     emailController = TextEditingController(text: widget.currentEmail);
-    locationController = TextEditingController(text: widget.currentLocation);
   }
 
   @override
   void dispose() {
     nameController.dispose();
     emailController.dispose();
-    locationController.dispose();
     super.dispose();
   }
 
   void saveProfile() async {
     final updatedName = nameController.text.trim();
     final updatedEmail = emailController.text.trim();
-    final updatedLocation = locationController.text.trim();
 
     final user = FirebaseAuth.instance.currentUser;
 
@@ -239,7 +229,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     Navigator.pop(context, {
       'name': updatedName,
       'email': updatedEmail,
-      'location': updatedLocation,
     });
   }
 
@@ -335,17 +324,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               decoration: InputDecoration(
                                 labelText: 'Email',
                                 prefixIcon: const Icon(Icons.email),
-                                filled: true,
-                                fillColor: Colors.white.withOpacity(0.8),
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            TextField(
-                              controller: locationController,
-                              decoration: InputDecoration(
-                                labelText: 'Location',
-                                prefixIcon: const Icon(Icons.location_on),
                                 filled: true,
                                 fillColor: Colors.white.withOpacity(0.8),
                                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),

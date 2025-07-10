@@ -664,11 +664,11 @@ class _JuicePreparingPageState extends State<JuicePreparingPage>
         if (status == AnimationStatus.completed) {
           setState(() => isDone = true);
           Future.delayed(const Duration(seconds: 2), () {
-            Navigator.pushAndRemoveUntil(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) => const JuiceCustomizationPage()),
-              (route) => false,
+
             );
           });
         }

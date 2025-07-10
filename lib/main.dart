@@ -7,7 +7,7 @@ import 'firebase_options.dart';
 import 'login.dart';
 import 'Home.dart';
 import 'juice_customization.dart';
-import 'package:slushies/order_history.dart';
+import 'order_history.dart';
 import 'about.dart';
 import 'customer_profile.dart';
 
