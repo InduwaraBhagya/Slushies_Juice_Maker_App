@@ -33,7 +33,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> with SingleTickerPr
       debugPrint('No user logged in.');
       return;
     }
- 
+
     final snapshot = await FirebaseFirestore.instance
         .collection('orders')
         .where('userId', isEqualTo: user.uid)
@@ -42,11 +42,12 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> with SingleTickerPr
         .collection('orders')
         .where('user_id', isEqualTo: user.uid)
         .get();
+
     userOrders = [
       ...snapshot.docs.map((doc) => doc.data()),
       ...snapshot2.docs.map((doc) => doc.data()),
     ];
-    debugPrint('Fetched orders: ' + userOrders.toString());
+    debugPrint('Fetched orders: $userOrders');
     setState(() {
       isLoading = false;
     });
@@ -70,8 +71,6 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> with SingleTickerPr
     );
 
     final order = userOrders[index];
-
-   
     final flavor = order['flavor'] ?? order['juice_type'] ?? '';
     final addons = (order['addons'] is List)
         ? (order['addons'] as List).join(', ')
@@ -91,13 +90,36 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> with SingleTickerPr
           end: Offset.zero,
         ).animate(animation),
         child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          elevation: 6,
+          shadowColor: Colors.deepOrange.withOpacity(0.4),
           margin: const EdgeInsets.only(bottom: 16),
-          elevation: 4,
           child: ListTile(
-            leading: const Icon(Icons.wine_bar, color: Colors.deepOrange),
-            title: Text(flavor),
-            subtitle: Text('Add-ons: $addons\nLocation: $location'),
-            trailing: Text(date),
+            leading: const Icon(Icons.wine_bar, color: Colors.deepOrangeAccent, size: 30),
+            title: Text(
+              flavor,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Add-ons: $addons'),
+                Text('Location: $location'),
+              ],
+            ),
+            trailing: Text(
+              date,
+              style: const TextStyle(
+                fontSize: 12,
+                fontStyle: FontStyle.italic,
+                color: Colors.grey,
+              ),
+            ),
           ),
         ),
       ),
@@ -111,16 +133,36 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> with SingleTickerPr
         title: const Text('Order History', style: TextStyle(color: Colors.white)),
         centerTitle: true,
         backgroundColor: Colors.deepOrange,
+        elevation: 4,
+        //shape: const RoundedRectangleBorder(
+          //borderRadius: BorderRadius.vertical(
+            //bottom: Radius.circular(20),
+         // ),
+        //),
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : userOrders.isEmpty
-              ? const Center(child: Text('No orders found.'))
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: userOrders.length,
-                  itemBuilder: _buildAnimatedItem,
-                ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFFFE0B2), Color(0xFFFFCCBC)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : userOrders.isEmpty
+                ? const Center(
+                    child: Text(
+                      'No orders found.',
+                      style: TextStyle(fontSize: 18, color: Colors.black54),
+                    ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: userOrders.length,
+                    itemBuilder: _buildAnimatedItem,
+                  ),
+      ),
     );
   }
 }

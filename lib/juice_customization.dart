@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 
 class JuiceCustomizationPage extends StatefulWidget {
@@ -642,22 +643,24 @@ class JuicePreparingPage extends StatefulWidget {
 }
 
 class _JuicePreparingPageState extends State<JuicePreparingPage>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
+    with TickerProviderStateMixin {
+  late AnimationController _progressController;
+  late Animation<double> _progressAnimation;
+
+  late AnimationController _rotationController;
   bool isDone = false;
 
   @override
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
-      duration: const Duration(seconds: 4),
+    _progressController = AnimationController(
+      duration: const Duration(seconds: 15),
       vsync: this,
     );
 
-    _animation = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
-      parent: _controller,
+    _progressAnimation = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
+      parent: _progressController,
       curve: Curves.easeInOut,
     ))
       ..addStatusListener((status) {
@@ -667,40 +670,66 @@ class _JuicePreparingPageState extends State<JuicePreparingPage>
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => const JuiceCustomizationPage()),
-
+                builder: (context) => const JuiceCustomizationPage(),
+              ),
             );
           });
         }
       });
 
-    _controller.forward();
+    _progressController.forward();
+
+    _rotationController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 3))
+          ..repeat();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _progressController.dispose();
+    _rotationController.dispose();
     super.dispose();
+  }
+
+  Widget _buildBubbles() {
+    return Positioned.fill(
+      child: IgnorePointer(
+        child: CustomPaint(
+          painter: BubblePainter(_progressAnimation.value),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRotatingGlass() {
+    return RotationTransition(
+      turns: _rotationController,
+      child: const Icon(Icons.autorenew, size: 80, color: Colors.deepOrangeAccent),
+    );
+  }
+
+  Widget _buildPreparingText() {
+    return AnimatedDefaultTextStyle(
+      duration: const Duration(milliseconds: 1500),
+      style: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: isDone ? Colors.deepOrangeAccent : Colors.deepOrangeAccent,
+      ),
+      child: Text(isDone ? 'Juice Ready!' : 'Preparing Your Juice...'),
+    );
   }
 
   Widget _buildProgress() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Icon(Icons.local_drink,
-            size: 80, color: Colors.deepOrangeAccent),
+        _buildRotatingGlass(),
         const SizedBox(height: 20),
-        Text(
-          isDone ? 'Juice Ready!' : 'Preparing Your Juice...',
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.deepOrange,
-          ),
-        ),
+        _buildPreparingText(),
         const SizedBox(height: 30),
         LinearProgressIndicator(
-          value: _animation.value,
+          value: _progressAnimation.value,
           color: Colors.deepOrange,
           backgroundColor: Colors.orange.shade100,
           minHeight: 12,
@@ -713,15 +742,41 @@ class _JuicePreparingPageState extends State<JuicePreparingPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: AnimatedBuilder(
-            animation: _animation,
-            builder: (context, _) => _buildProgress(),
+      body: Stack(
+        children: [
+          _buildBubbles(),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: AnimatedBuilder(
+                animation: _progressAnimation,
+                builder: (context, _) => _buildProgress(),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
+}
+
+class BubblePainter extends CustomPainter {
+  final double progress;
+  final Random _random = Random();
+
+  BubblePainter(this.progress);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = Colors.orange.withOpacity(0.2);
+    for (int i = 0; i < 10; i++) {
+      final radius = _random.nextDouble() * 10 + 5;
+      final x = _random.nextDouble() * size.width;
+      final y = size.height - (progress * size.height) - _random.nextDouble() * 100;
+      canvas.drawCircle(Offset(x, y), radius, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }

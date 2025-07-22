@@ -4,18 +4,17 @@
 #include <time.h> 
 
 
-#define WIFI_SSID "BhagyaM14"
-#define WIFI_PASSWORD "akee1012"
-
+#define WIFI_SSID "lasindupc"
+#define WIFI_PASSWORD "lasindu96"
 
 const char* FIREBASE_HOST = "firestore.googleapis.com";
 const int HTTPS_PORT = 443;
 const char* PROJECT_ID = "slushies-7eaf7";
 const char* API_KEY = "AIzaSyAjWiZiBcyUiE799UH9eTEOKdxzZAhIMrc";
 
-#define ORANGE_RELAY D1
+#define ORANGE_RELAY D6
 #define MANGO_RELAY  D5
-#define SUGAR_RELAY  D3
+#define SUGAR_RELAY  D7
 #define WATER_RELAY  D8
 
 const int JUICE_DURATION = 5000;
@@ -33,9 +32,9 @@ const int   DAYLIGHT_OFFSET_SEC = 0;
 
 String getPinName(int pin) {
   switch(pin) {
-    case D1: return "D1 (ORANGE_RELAY)";
+    case D6: return "D6 (ORANGE_RELAY)";
     case D5: return "D5 (MANGO_RELAY)";
-    case D3: return "D3 (SUGAR_RELAY)";
+    case D7: return "D7 (SUGAR_RELAY)";
     case D8: return "D8 (WATER_RELAY)";
     default: return "PIN_" + String(pin);
   }
